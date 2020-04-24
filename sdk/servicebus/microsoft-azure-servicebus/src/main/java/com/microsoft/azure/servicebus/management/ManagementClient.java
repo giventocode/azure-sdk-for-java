@@ -16,6 +16,8 @@ import com.microsoft.azure.servicebus.primitives.TimeoutException;
 import com.microsoft.azure.servicebus.primitives.Util;
 import com.microsoft.azure.servicebus.rules.RuleDescription;
 
+import org.asynchttpclient.DefaultAsyncHttpClientConfig;
+
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
@@ -33,6 +35,10 @@ public class ManagementClient {
 
     public ManagementClient(URI namespaceEndpointURI, ClientSettings clientSettings) {
         this.asyncClient = new ManagementClientAsync(namespaceEndpointURI, clientSettings);
+    }
+    
+    public ManagementClient(URI namespaceEndpointURI, ClientSettings clientSettings, DefaultAsyncHttpClientConfig.Builder httpClientBuilder) {
+        this.asyncClient = new ManagementClientAsync(namespaceEndpointURI, clientSettings, httpClientBuilder);
     }
 
     /**

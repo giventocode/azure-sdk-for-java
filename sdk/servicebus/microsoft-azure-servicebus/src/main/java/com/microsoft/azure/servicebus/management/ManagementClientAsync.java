@@ -87,12 +87,24 @@ public class ManagementClientAsync {
      * @param clientSettings - client settings.
      */
     public ManagementClientAsync(URI namespaceEndpointURI, ClientSettings clientSettings) {
+        this(namespaceEndpointURI, clientSettings, Dsl.config()
+        .setConnectTimeout((int) CONNECTION_TIMEOUT.toMillis())
+        .setRequestTimeout((int) clientSettings.getOperationTimeout().toMillis()));
+    }
+
+    /**
+     * Creates a new {@link ManagementClientAsync}.
+     * User should call {@link ManagementClientAsync#close()} at the end of life of the client.
+     * The operation timeout included in clientSettings is ignored. 
+     * To change this value, you must set the request timeout in HTTP Client config settings.
+     * @param namespaceEndpointURI - URI of the namespace connecting to.
+     * @param clientSettings - client settings.
+     * @param builder - HTTP client builder.
+     */
+    public ManagementClientAsync(URI namespaceEndpointURI, ClientSettings clientSettings, DefaultAsyncHttpClientConfig.Builder httpClientBuilder) {
         this.namespaceEndpointURI = namespaceEndpointURI;
         this.clientSettings = clientSettings;
-        DefaultAsyncHttpClientConfig.Builder clientBuilder = Dsl.config()
-                .setConnectTimeout((int) CONNECTION_TIMEOUT.toMillis())
-                .setRequestTimeout((int) this.clientSettings.getOperationTimeout().toMillis());
-        this.asyncHttpClient = asyncHttpClient(clientBuilder);
+        this.asyncHttpClient = asyncHttpClient(httpClientBuilder);
     }
 
     /**
